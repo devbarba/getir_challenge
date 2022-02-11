@@ -2,10 +2,17 @@
   "name": "getir_challenge",
   "version": "1.0.0",
   "description": "Getir Node.JS Backend Challenge",
-  "main": "index.js",
+  "main": "src/server.js",
   "repository": "git@github.com:devbarba/getir_challenge.git",
   "author": "Joao Harbs <harbspj@gmail.com>",
   "license": "MIT",
+  "scripts": {
+    "build": "yarn run clean && babel $PWD/src --extensions \".js,.ts\" --out-dir $PWD/dist --copy-files --no-copy-ignored",
+    "start": "PROJECT_DIR=dist babel-node -- ./dist/server.js",
+    "clean": "rm -rf ./dist && mkdir dist",
+    "dev": "PROJECT_DIR=src ts-node-dev -r tsconfig-paths/register --respawn --transpile-only --ignore-watch node_modules --no-notify src/server.ts",
+    "test": "jest"
+  },
   "babel": {
     "plugins": [
       "@babel/plugin-proposal-class-properties",
@@ -13,7 +20,8 @@
     ]
   },
   "dependencies": {
-    "dotenv": "^16.0.0",
+    "cors": "^2.8.5",
+    "dotenv-safe": "^8.2.0",
     "express": "^4.17.2",
     "mongoose": "^6.2.1"
   },
