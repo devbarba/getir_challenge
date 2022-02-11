@@ -3,7 +3,11 @@ import mongoose from 'mongoose';
 export default (db: string) => {
     const connect = () => {
         mongoose
-            .connect(db)
+            .connect(db, {
+                useCreateIndex: true,
+                useNewUrlParser: true,
+                useUnifiedTopology: true,
+            })
             .then(() => {
                 return console.log(`Successfully connected to ${db}`);
             })
