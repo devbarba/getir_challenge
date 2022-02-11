@@ -1,3 +1,4 @@
+import mongoose, { mongo } from 'mongoose';
 import bodyParser from 'body-parser';
 import express, { Application } from 'express';
 import cors from 'cors';
@@ -14,13 +15,14 @@ class App {
         this.server = express();
         this.middlewares();
         this.routes();
+        this.loadMongoDatabase();
     }
 
-    public loadConfigurations() {
+    private loadConfigurations() {
         this.configObject = autoloadConfig(getBaseDir());
     }
 
-    public middlewares() {
+    private middlewares() {
         this.server.use(cors());
         this.server.use(bodyParser.json());
         this.server.use(
@@ -32,6 +34,23 @@ class App {
 
     private routes() {
         this.server.use(routes);
+    }
+
+    public loadMongoDatabase() {
+        const mongoUri = this.configObject.app.mongo_uri;
+
+        if (mongoUri) {
+            mongoose.connect(mongoUri)
+                .then(() => {
+                    return console.log(`Successfully connected to ${mongoUri}`);
+                })
+                .catch((error: Error) => {
+                    console.log('Error connecting to database: ', error);
+                    return process.exit(1);
+                });
+        } else {
+            throw 'Error connecting to database: MONGO_URI not found.';
+        }
     }
 }
 
