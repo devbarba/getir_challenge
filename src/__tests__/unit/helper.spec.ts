@@ -1,3 +1,4 @@
+import * as dotenv from 'dotenv-safe';
 import IConfig from '../../configs/app';
 import {
     autoloadConfig,
@@ -7,6 +8,11 @@ import {
 } from '../../utils/helper';
 
 describe('Testing helper functions', () => {
+
+    beforeAll(() => {
+        dotenv.config();
+    });
+
     test('expect return dir with getDir()', () => {
         expect(getDir('/')).toBe('/');
         expect.assertions(1);
@@ -24,6 +30,11 @@ describe('Testing helper functions', () => {
 
     test('expect return APP_ENV value', () => {
         expect(getEnv('APP_ENV', 'local')).toBe('local');
+        expect.assertions(1);
+    });
+
+    test('expect return APP_ENV value = "local" because alternative APP_ENV1 does not exists', () => {
+        expect(getEnv('APP_ENV1', 'APP_ENV')).toBe('local');
         expect.assertions(1);
     });
 
