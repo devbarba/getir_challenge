@@ -1,4 +1,4 @@
-import mongoose, { mongo } from 'mongoose';
+import connect from './database';
 import bodyParser from 'body-parser';
 import express, { Application } from 'express';
 import cors from 'cors';
@@ -39,18 +39,8 @@ class App {
     public loadMongoDatabase() {
         const mongoUri = this.configObject.app.mongo_uri;
 
-        if (mongoUri) {
-            mongoose.connect(mongoUri)
-                .then(() => {
-                    return console.log(`Successfully connected to ${mongoUri}`);
-                })
-                .catch((error: Error) => {
-                    console.log('Error connecting to database: ', error);
-                    return process.exit(1);
-                });
-        } else {
-            throw 'Error connecting to database: MONGO_URI not found.';
-        }
+        if (!mongoUri) throw 'Error connecting to database: MONGO_URI not found.';
+        if (mongoUri) connect(mongoUri);
     }
 }
 
