@@ -1,0 +1,29 @@
+{
+    "compilerOptions": {
+      "target": "ES2020",
+      "module": "commonjs",
+      "lib": ["ES2020"],
+      "allowJs": true,
+      "sourceMap": true,
+      "outDir": "./dist",
+      "rootDir": "./src",
+      "removeComments": true,
+      "resolveJsonModule": true,
+      "declaration": false,
+      "strictNullChecks": true,
+      "moduleResolution": "node",
+      "typeRoots": [
+        "node_modules/@types",
+      ],
+      "esModuleInterop": true,
+      "experimentalDecorators": true,
+      "emitDecoratorMetadata": true,
+      "skipLibCheck": true,
+      "forceConsistentCasingInFileNames": true,
+      "baseUrl": "."
+    },
+    "include": ["src/**/*"],
+    "exclude": [
+      "./jest.config.ts"
+    ]
+}
