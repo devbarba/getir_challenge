@@ -5,6 +5,7 @@ import cors from 'cors';
 import routes from './routes/index';
 import IConfig from './interfaces/configs';
 import { autoloadConfig, getBaseDir } from './utils/helper';
+import Handler from './errors/handler.error';
 
 class App {
     public server: Application;
@@ -15,7 +16,8 @@ class App {
         this.server = express();
         this.middlewares();
         this.routes();
-        this.loadMongoDatabase();
+        this.mongoDatabase();
+        this.errorHandling();
     }
 
     private loadConfigurations() {
@@ -36,11 +38,28 @@ class App {
         this.server.use(routes);
     }
 
-    public loadMongoDatabase() {
+    private mongoDatabase() {
         const mongoUri = this.configObject.app.mongo_uri;
 
         if (!mongoUri) throw 'Error connecting to database: MONGO_URI not found.';
         if (mongoUri) connect(mongoUri);
+    }
+
+    private errorHandling() {
+        this.server.use((error, req, res, next) => {
+            if (error instanceof Handler) {
+                return res.status(error.getStatusCode()).json({
+                    code: error.getCode(),
+                    msg: error.getMessage(),
+                    ...(error.getCode() >= 1 ? { records: [] } : {})
+                })
+            }
+
+            return res.status(500).json({
+                code: 500,
+                msg:  error.message
+            })
+        });
     }
 }
 

@@ -1,6 +1,8 @@
 import fs from 'fs';
+import { BAD_REQUEST, PRECONDITION_FAILED} from 'http-status';
 import path from 'path';
-import IConfig from 'src/interfaces/configs';
+import Handler from '../errors/handler.error';
+import IConfig from '../interfaces/configs';
 
 /**
  * autoloadConfig: Auto load configurations.
@@ -56,19 +58,29 @@ const getDir = (folder: string = '') : string => path.resolve(__dirname, '../', 
 const getBaseDir = (folder: string = '') : string => getDir(folder ? `${folder}` : '');
 
 /**
- * verifyRequiredFields: Verify if required field is present.
+ * verifyFields: Verify if required field is present or if have extra fields.
  * @param requiredFields string[]
  * @param field {}
- * @returns boolean | string[]
+ * @returns false | string[]
  */
-const verifyRequiredFields = (requiredFields: string[], fields: {}): Boolean | string[] => {
+const verifyFields = (requiredFields: string[], fields: {}): false | string[] => {
     let inexistentFields: string[] = [];
+    let extraFields: string[] = [];
 
     requiredFields.forEach((reqField) => {
         if (!(reqField in fields)) inexistentFields.push(reqField);
     })
 
-    return inexistentFields.length > 0 ? inexistentFields : false;
+    if (inexistentFields.length > 0)
+        throw new Handler(`missing field(s): ${inexistentFields}`, 1, PRECONDITION_FAILED);
+
+    for(const field in fields)
+        if (!requiredFields.includes(field)) extraFields.push(field);
+
+    if (extraFields.length > 0)
+        throw new Handler(`remove extra field(s): ${extraFields}`, 2, BAD_REQUEST);
+
+    return false;
 }
 
 export {
@@ -76,5 +88,5 @@ export {
     getEnv,
     getDir,
     getBaseDir,
-    verifyRequiredFields
+    verifyFields
 }
