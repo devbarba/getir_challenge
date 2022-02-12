@@ -55,9 +55,26 @@ const getDir = (folder: string = '') : string => path.resolve(__dirname, '../', 
  */
 const getBaseDir = (folder: string = '') : string => getDir(folder ? `${folder}` : '');
 
+/**
+ * verifyRequiredFields: Verify if required field is present.
+ * @param requiredFields string[]
+ * @param field {}
+ * @returns boolean | string[]
+ */
+const verifyRequiredFields = (requiredFields: string[], fields: {}): Boolean | string[] => {
+    let inexistentFields: string[] = [];
+
+    requiredFields.forEach((reqField) => {
+        if (!(reqField in fields)) inexistentFields.push(reqField);
+    })
+
+    return inexistentFields.length > 0 ? inexistentFields : false;
+}
+
 export {
     autoloadConfig,
     getEnv,
     getDir,
-    getBaseDir
+    getBaseDir,
+    verifyRequiredFields
 }
