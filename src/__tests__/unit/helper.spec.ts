@@ -48,6 +48,12 @@ describe('Testing helper functions', () => {
             expect(getEnv('NON_EXISTENT', 'alternate_non_existent')).toBe('alternate_non_existent');
             expect.assertions(1);
         });
+
+        test('expect return missing env: MONGO_TEST', () => {
+            expect(() => getEnv('MONGO_TEST', '', true))
+                .toThrow('missing key: MONGO_TEST');
+            expect.assertions(1);
+        });
     });
 
     describe('handling autoloadConfig()', () => {
