@@ -8,5 +8,5 @@ export default {
   host: getEnv('HOST', '0.0.0.0'),
   port: getEnv('PORT', 3000),
   timezone: getEnv('APP_TZ', 'Europe/Rome'),
-  mongo_uri: getEnv('MONGO_URI', ''),
+  mongo_uri: getEnv('MONGO_URI', '', true),
 };

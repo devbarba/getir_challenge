@@ -39,10 +39,7 @@ class App {
     }
 
     private mongoDatabase() {
-        const mongoUri = this.configObject.app.mongo_uri;
-
-        if (!mongoUri) throw 'Error connecting to database: MONGO_URI not found.';
-        if (mongoUri) connect(mongoUri);
+        connect(this.configObject.app.mongo_uri, true);
     }
 
     private errorHandling() {
@@ -51,7 +48,7 @@ class App {
                 return res.status(error.getStatusCode()).json({
                     code: error.getCode(),
                     msg: error.getMessage(),
-                    ...(error.getCode() >= 1 ? { records: [] } : {})
+                    records: []
                 })
             }
 

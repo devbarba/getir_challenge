@@ -12,10 +12,7 @@ import IConfig from '../interfaces/configs';
 const autoloadConfig = (base_dir: string) : IConfig => {
     const configDir = path.join(base_dir, 'configs');
 
-    if (!fs.existsSync(configDir)) {
-      // eslint-disable-next-line no-throw-literal
-      throw 'directory config not exists';
-    }
+    if (!fs.existsSync(configDir)) throw 'directory config not exists';
 
     const configs = fs.readdirSync(configDir);
 
@@ -35,7 +32,10 @@ const autoloadConfig = (base_dir: string) : IConfig => {
  * @param alternate
  * @returns
  */
-const getEnv = (key: string, alternate: any = null) : any => {
+const getEnv = (key: string, alternate: any = null, required?: boolean) : any => {
+    if (required && process.env[key] === undefined && process.env[alternate] === undefined)
+        throw `missing key: ${key}`;
+
     if (process.env[key] && process.env[key] !== 'null') return process.env[key];
 
     if (process.env[alternate] && process.env[alternate] !== 'null') return process.env[alternate];
