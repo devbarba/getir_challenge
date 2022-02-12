@@ -1,9 +1,6 @@
-
-
-import { Document, Model, model, Schema, ObjectId } from 'mongoose';
+import { Document, Model, model, Schema } from 'mongoose';
 
 interface RecordInterface extends Document {
-    _id: ObjectId;
     key: string;
     value: string;
     counts: string;
