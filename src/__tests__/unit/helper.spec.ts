@@ -5,10 +5,11 @@ import {
     getEnv,
     getDir,
     getBaseDir,
-    verifyRequiredFields
+    verifyFields
 } from '../../utils/helper';
 
 describe('Testing helper functions', () => {
+
     beforeAll(() => {
         dotenv.config();
     });
@@ -62,28 +63,32 @@ describe('Testing helper functions', () => {
         });
     });
 
-    describe('handling verifyRequiredFields()', () => {
-        test('expect to return missing fields when call verifyRequiredFields()', () => {
-            const body = { startDate: '2022-02-10', minCount: 3000 };
-            const requiredFields = ['startDate', 'endDate', 'minCount', 'maxCount'];
+    describe('handling verifyFields()', () => {
+        const requiredFields = ['startDate', 'endDate', 'minCount', 'maxCount'];
+        const missingBody = { startDate: '2022-02-10', minCount: 3000 };
+        let fullBody = {
+            startDate: '2022-02-10',
+            endDate: '2022-02-12',
+            minCount: 3000,
+            maxCount: 3100
+        };
 
-            const fields = verifyRequiredFields(requiredFields, body);
-
-            expect(fields).toEqual(["endDate", "maxCount"]);
-            expect(fields).toBeInstanceOf(Array);
-            expect.assertions(2);
+        test('expect to return missing fields when call verifyFields()', () => {
+            expect(() => verifyFields(requiredFields, missingBody))
+                .toThrowError('missing field(s): endDate,maxCount');
+            expect.assertions(1);
         });
 
-        test('expect to return false when call verifyRequiredFields()', () => {
-            const body = {
-                startDate: '2022-02-10',
-                endDate: '2022-02-12',
-                minCount: 3000,
-                maxCount: 3100
-            };
-            const requiredFields = ['startDate', 'endDate', 'minCount', 'maxCount'];
+        test('expect to return extra fields when call verifyFields()', () => {
+            fullBody['testing'] = true;
+            expect(() => verifyFields(requiredFields, fullBody))
+                .toThrowError('remove extra field(s): testing');
+            expect.assertions(1);
+        });
 
-            const fields = verifyRequiredFields(requiredFields, body);
+        test('expect to return false when call verifyFields()', () => {
+            delete fullBody['testing'];
+            const fields = verifyFields(requiredFields, fullBody);
 
             expect(fields).toBeFalsy();
             expect.assertions(1);
