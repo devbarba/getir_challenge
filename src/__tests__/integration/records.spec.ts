@@ -15,9 +15,9 @@ import { IRecord } from '../../interfaces/records';
 import responseCodes from '../../utils/codes';
 import { defaultPayload, missingKeysPayload } from '../mocks/payloads.mock';
 
-describe('POST /orders', () => {
+describe('POST /api/orders', () => {
     let connection: MongoClient;
-    const endpoint = '/records';
+    const endpoint = '/api/records';
 
     beforeAll(async () => {
         dotenv.config();
