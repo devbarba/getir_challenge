@@ -1,15 +1,15 @@
 import * as dotenv from 'dotenv-safe';
+
 import IConfig from '../../configs/app';
 import {
     autoloadConfig,
     getEnv,
     getDir,
     getBaseDir,
-    verifyFields
+    verifyFields,
 } from '../../utils/helper';
 
 describe('Testing helper functions', () => {
-
     beforeAll(() => {
         dotenv.config();
     });
@@ -45,26 +45,32 @@ describe('Testing helper functions', () => {
         });
 
         test('expect return alternate NON_EXISTENT value', () => {
-            expect(getEnv('NON_EXISTENT', 'alternate_non_existent')).toBe('alternate_non_existent');
+            expect(getEnv('NON_EXISTENT', 'alternate_non_existent')).toBe(
+                'alternate_non_existent'
+            );
             expect.assertions(1);
         });
 
         test('expect return missing env: MONGO_TEST', () => {
-            expect(() => getEnv('MONGO_TEST', '', true))
-                .toThrow('missing key: MONGO_TEST');
+            expect(() => getEnv('MONGO_TEST', '', true)).toThrow(
+                'missing key: MONGO_TEST'
+            );
             expect.assertions(1);
         });
     });
 
     describe('handling autoloadConfig()', () => {
         test('expect load all envs with autoloadConfig()', () => {
-            expect(autoloadConfig(getBaseDir())).toMatchObject({} as typeof IConfig)
+            expect(autoloadConfig(getBaseDir())).toMatchObject(
+                {} as typeof IConfig
+            );
             expect.assertions(1);
         });
 
         test('expect throw error whentry to load envs with autoloadConfig()', () => {
-            expect(() => autoloadConfig(getBaseDir('/non-existent')))
-                .toThrow('directory config not exists');
+            expect(() => autoloadConfig(getBaseDir('/non-existent'))).toThrow(
+                'directory config not exists'
+            );
             expect.assertions(1);
         });
     });
@@ -72,28 +78,28 @@ describe('Testing helper functions', () => {
     describe('handling verifyFields()', () => {
         const requiredFields = ['startDate', 'endDate', 'minCount', 'maxCount'];
         const missingBody = { startDate: '2022-02-10', minCount: 3000 };
-        let fullBody = {
+        const fullBody = {
             startDate: '2022-02-10',
             endDate: '2022-02-12',
             minCount: 3000,
-            maxCount: 3100
+            maxCount: 3100,
         };
 
         test('expect to return missing fields when call verifyFields()', () => {
-            expect(() => verifyFields(requiredFields, missingBody))
-                .toThrowError('missing field(s): endDate,maxCount');
+            expect(() =>
+                verifyFields(requiredFields, missingBody)
+            ).toThrowError('missing field(s): endDate,maxCount');
             expect.assertions(1);
         });
 
         test('expect to return extra fields when call verifyFields()', () => {
-            fullBody['testing'] = true;
-            expect(() => verifyFields(requiredFields, fullBody))
-                .toThrowError('remove extra field(s): testing');
+            expect(() =>
+                verifyFields(requiredFields, { ...fullBody, testing: true })
+            ).toThrowError('remove extra field(s): testing');
             expect.assertions(1);
         });
 
         test('expect to return false when call verifyFields()', () => {
-            delete fullBody['testing'];
             const fields = verifyFields(requiredFields, fullBody);
 
             expect(fields).toBeFalsy();

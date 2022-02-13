@@ -1,13 +1,12 @@
-import { IRoute, IRouteResponse } from '../interfaces/route';
 import { Response } from 'express';
-import { verifyFields } from '../utils/helper';
 import { OK } from 'http-status';
+
+import { IRoute, IRouteResponse } from '../interfaces/route';
 import RecordService from '../services/record.service';
+import { verifyFields } from '../utils/helper';
 
 interface IRecordController {
-    read({
-      req, res, next,
-    }: IRoute): Promise<Response<IRouteResponse>>;
+    read({ req, res, next }: IRoute): Promise<Response<IRouteResponse>>;
 }
 
 class Recordontroller implements IRecordController {
@@ -18,10 +17,15 @@ class Recordontroller implements IRecordController {
     }
 
     public async read({
-        req, res, next,
+        req,
+        res,
+        next,
     }: IRoute): Promise<Response<IRouteResponse>> {
         try {
-            verifyFields(['startDate', 'endDate', 'minCount', 'maxCount'], req.body);
+            verifyFields(
+                ['startDate', 'endDate', 'minCount', 'maxCount'],
+                req.body
+            );
 
             const { startDate, endDate, minCount, maxCount } = req.body;
 
@@ -29,7 +33,7 @@ class Recordontroller implements IRecordController {
                 startDate,
                 endDate,
                 minCount,
-                maxCount
+                maxCount,
             });
 
             return res.status(OK).json({ code: 0, msg: 'success', records });

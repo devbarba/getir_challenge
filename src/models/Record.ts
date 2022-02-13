@@ -1,6 +1,6 @@
 import { Document, Model, model, Schema } from 'mongoose';
 
-interface RecordInterface extends Document {
+interface IRecordInterface extends Document {
     key: string;
     value: string;
     counts: string;
@@ -27,9 +27,9 @@ const Record = new Schema({
     },
 });
 
-const RecordModel: Model<RecordInterface> = model<
-    RecordInterface,
-    Model<RecordInterface>
+const RecordModel: Model<IRecordInterface> = model<
+    IRecordInterface,
+    Model<IRecordInterface>
 >('Record', Record);
 
 export default RecordModel;

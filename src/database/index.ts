@@ -8,6 +8,6 @@ export default (db: string, start: boolean) => {
                 useNewUrlParser: true,
                 useUnifiedTopology: true,
             })
-            .catch((error: Error) => process.exit(1));
+            .catch(() => process.exit(1));
     }
 };
