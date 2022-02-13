@@ -8,6 +8,12 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
+    env:
+      APP_ENV: ${{secrets.APP_ENV}}
+      HOST: ${{secrets.HOST}}
+      PORT: ${{secrets.PORT}}
+      TZ: ${{secrets.TZ}}
+      MONGO_URI: ${{secrets.MONGO_URI}}
     strategy:
       matrix:
         node-version: [12.x, 14.x]
