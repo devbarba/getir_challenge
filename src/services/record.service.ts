@@ -3,6 +3,7 @@ import { NOT_FOUND } from 'http-status';
 import Handler from '../errors/handler.error';
 import { IRecord, IRequestRecord } from '../interfaces/records';
 import Record from '../models/Record';
+import responseCodes from '../utils/codes';
 
 interface IRecordService {
     read({
@@ -35,7 +36,11 @@ class RecordService implements IRecordService {
         ]);
 
         if (!records || records.length === 0)
-            throw new Handler('no query results found', 3, NOT_FOUND);
+            throw new Handler(
+                responseCodes.NOT_FOUND.msg,
+                responseCodes.NOT_FOUND.code,
+                NOT_FOUND
+            );
 
         return records;
     }

@@ -4,6 +4,7 @@ import path from 'path';
 
 import Handler from '../errors/handler.error';
 import IConfig from '../interfaces/configs';
+import responseCodes from './codes';
 
 /**
  * autoloadConfig: Auto load configurations.
@@ -87,8 +88,8 @@ const verifyFields = (
 
     if (inexistentFields.length > 0)
         throw new Handler(
-            `missing field(s): ${inexistentFields}`,
-            1,
+            `${responseCodes.PRECONDITION_FAILED.msg}: ${inexistentFields}`,
+            responseCodes.PRECONDITION_FAILED.code,
             PRECONDITION_FAILED
         );
 
@@ -97,8 +98,8 @@ const verifyFields = (
 
     if (extraFields.length > 0)
         throw new Handler(
-            `remove extra field(s): ${extraFields}`,
-            2,
+            `${responseCodes.BAD_REQUEST.msg}: ${extraFields}`,
+            responseCodes.BAD_REQUEST.code,
             BAD_REQUEST
         );
 

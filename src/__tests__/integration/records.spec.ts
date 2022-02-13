@@ -1,10 +1,18 @@
 import * as dotenv from 'dotenv-safe';
+import {
+    BAD_REQUEST,
+    INTERNAL_SERVER_ERROR,
+    NOT_FOUND,
+    OK,
+    PRECONDITION_FAILED,
+} from 'http-status';
 import { MongoClient } from 'mongodb';
 import mongoose from 'mongoose';
 import request from 'supertest';
 
 import app from '../../app';
 import { IRecord } from '../../interfaces/records';
+import responseCodes from '../../utils/codes';
 import { defaultPayload, missingKeysPayload } from '../mocks/payloads.mock';
 
 describe('POST /orders', () => {
@@ -27,14 +35,56 @@ describe('POST /orders', () => {
             .send(defaultPayload);
 
         expect(records.body).toBeDefined();
-        expect(records.status).toBe(200);
+        expect(records.status).toBe(OK);
         expect(records.body.records.length).toBeGreaterThan(0);
         expect(records.body).toMatchObject({
-            code: 0,
-            msg: 'success',
+            code: responseCodes.SUCCESS.code,
+            msg: responseCodes.SUCCESS.msg,
             records: {} as IRecord,
         });
         expect.assertions(4);
+    });
+
+    test('should return precondition failed error cause startDate > endDate', async () => {
+        const records = await request(app.server)
+            .post(endpoint)
+            .set('Content-Type', 'application/json')
+            .send({
+                startDate: defaultPayload.endDate,
+                endDate: defaultPayload.startDate,
+                minCount: defaultPayload.minCount,
+                maxCount: defaultPayload.maxCount,
+            });
+
+        expect(records.body).toBeDefined();
+        expect(records.status).toBe(BAD_REQUEST);
+        expect(records.body).toMatchObject({
+            code: responseCodes.DATA_MISMATCH.code,
+            msg: responseCodes.DATA_MISMATCH.extra?.date,
+            records: [],
+        });
+        expect.assertions(3);
+    });
+
+    test('should return precondition failed error cause minCount > maxCount', async () => {
+        const records = await request(app.server)
+            .post(endpoint)
+            .set('Content-Type', 'application/json')
+            .send({
+                startDate: defaultPayload.startDate,
+                endDate: defaultPayload.endDate,
+                minCount: defaultPayload.maxCount,
+                maxCount: defaultPayload.minCount,
+            });
+
+        expect(records.body).toBeDefined();
+        expect(records.status).toBe(BAD_REQUEST);
+        expect(records.body).toMatchObject({
+            code: responseCodes.DATA_MISMATCH.code,
+            msg: responseCodes.DATA_MISMATCH.extra?.count,
+            records: [],
+        });
+        expect.assertions(3);
     });
 
     test('should retrieve 404 not found cause does not exist in mongoDB', async () => {
@@ -47,11 +97,11 @@ describe('POST /orders', () => {
             .send(defaultPayload);
 
         expect(records.body).toBeDefined();
-        expect(records.status).toBe(404);
+        expect(records.status).toBe(NOT_FOUND);
         expect(records.body.records.length).toBe(0);
         expect(records.body).toMatchObject({
-            code: 3,
-            msg: 'no query results found',
+            code: responseCodes.NOT_FOUND.code,
+            msg: responseCodes.NOT_FOUND.msg,
             records: [],
         });
         expect.assertions(4);
@@ -63,11 +113,11 @@ describe('POST /orders', () => {
             .send(missingKeysPayload);
 
         expect(records.body).toBeDefined();
-        expect(records.status).toBe(412);
+        expect(records.status).toBe(PRECONDITION_FAILED);
         expect(records.body.records.length).toBe(0);
         expect(records.body).toMatchObject({
-            code: 1,
-            msg: 'missing field(s): endDate,minCount',
+            code: responseCodes.PRECONDITION_FAILED.code,
+            msg: `${responseCodes.PRECONDITION_FAILED.msg}: endDate,minCount`,
             records: [],
         });
         expect.assertions(4);
@@ -81,11 +131,11 @@ describe('POST /orders', () => {
             .send({ ...newPayload, testing: 1000 });
 
         expect(records.body).toBeDefined();
-        expect(records.status).toBe(400);
+        expect(records.status).toBe(BAD_REQUEST);
         expect(records.body.records.length).toBe(0);
         expect(records.body).toMatchObject({
-            code: 2,
-            msg: 'remove extra field(s): testing',
+            code: responseCodes.BAD_REQUEST.code,
+            msg: `${responseCodes.BAD_REQUEST.msg}: testing`,
             records: [],
         });
         expect.assertions(4);
@@ -98,10 +148,10 @@ describe('POST /orders', () => {
             .send(',,');
 
         expect(records.body).toBeDefined();
-        expect(records.status).toBe(500);
+        expect(records.status).toBe(INTERNAL_SERVER_ERROR);
         expect(records.body.records).toBeUndefined();
         expect(records.body).toMatchObject({
-            code: 500,
+            code: responseCodes.SERVER_ERROR.code,
             msg: 'Unexpected token , in JSON at position 0',
         });
         expect.assertions(4);

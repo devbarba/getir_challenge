@@ -36,7 +36,7 @@ class App {
     }
 
     private routes() {
-        this.server.use(routes);
+        this.server.use('/api', routes);
     }
 
     private mongoDatabase() {
@@ -54,7 +54,7 @@ class App {
             }
 
             return res.status(500).json({
-                code: 500,
+                code: 5,
                 msg: error.message,
             });
         });

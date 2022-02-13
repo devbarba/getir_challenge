@@ -1,8 +1,10 @@
 import { Response } from 'express';
-import { OK } from 'http-status';
+import { BAD_REQUEST, OK } from 'http-status';
 
+import Handler from '../errors/handler.error';
 import { IRoute, IRouteResponse } from '../interfaces/route';
 import RecordService from '../services/record.service';
+import responseCodes from '../utils/codes';
 import { verifyFields } from '../utils/helper';
 
 interface IRecordController {
@@ -29,6 +31,20 @@ class Recordontroller implements IRecordController {
 
             const { startDate, endDate, minCount, maxCount } = req.body;
 
+            if (new Date(startDate).getTime() > new Date(endDate).getTime())
+                throw new Handler(
+                    responseCodes.DATA_MISMATCH.extra?.date ?? '',
+                    responseCodes.DATA_MISMATCH.code,
+                    BAD_REQUEST
+                );
+
+            if (minCount > maxCount)
+                throw new Handler(
+                    responseCodes.DATA_MISMATCH.extra?.count ?? '',
+                    responseCodes.DATA_MISMATCH.code,
+                    BAD_REQUEST
+                );
+
             const records = await this.recordService.read({
                 startDate,
                 endDate,
@@ -36,7 +52,11 @@ class Recordontroller implements IRecordController {
                 maxCount,
             });
 
-            return res.status(OK).json({ code: 0, msg: 'success', records });
+            return res.status(OK).json({
+                code: responseCodes.SUCCESS.code,
+                msg: responseCodes.SUCCESS.msg,
+                records,
+            });
         } catch (error) {
             return next(error);
         }
