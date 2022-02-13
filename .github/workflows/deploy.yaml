@@ -2,13 +2,12 @@ name: Deploy
 
 on:
   pull_request:
-    branches:
-      - main
+    types: [closed]
 
 jobs:
   deploy:
-    runs-on: ubuntu-latest
     if: github.event.action == 'closed' && github.event.pull_request.merged == true
+    runs-on: ubuntu-latest
     steps:
       - name: Checkout repository
         uses: actions/checkout@v2
