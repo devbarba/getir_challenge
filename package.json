@@ -7,8 +7,9 @@
   "author": "Joao Harbs <harbspj@gmail.com>",
   "license": "MIT",
   "scripts": {
-    "build": "yarn run clean && babel $PWD/src --extensions \".js,.ts\" --out-dir $PWD/dist --copy-files --no-copy-ignored",
+    "build": "babel src --extensions \".js,.ts\" --out-dir dist --copy-files --no-copy-ignored",
     "start": "PROJECT_DIR=dist babel-node -- ./dist/server.js",
+    "production": "yarn build && node dist/index.js",
     "clean": "rm -rf ./dist && mkdir dist",
     "dev": "PROJECT_DIR=src ts-node-dev -r tsconfig-paths/register --respawn --transpile-only --ignore-watch node_modules --no-notify src/server.ts",
     "test": "jest"
