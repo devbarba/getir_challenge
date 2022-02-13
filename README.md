@@ -107,8 +107,8 @@ ___
 	"startDate": "2016-01-01",
 	"endDate": "2018-12-31",
 	"minCount": 28921,
-    "maxCount": 29061,
-    "testing": true
+	"maxCount": 29061,
+	"testing": true
 }
 ```
 
@@ -130,7 +130,7 @@ ___
 	"startDate": "2016-01-01",
 	"endDate": "2018-12-31",
 	"minCount": 289211,
-    "maxCount": 29061
+	"maxCount": 29061
 }
 ```
 
@@ -152,7 +152,7 @@ ___
 	"startDate": "2018-12-31",
 	"endDate": "2016-01-01",
 	"minCount": 28921,
-    "maxCount": 29061
+	"maxCount": 29061
 }
 ```
 
@@ -217,7 +217,7 @@ ___
 	"startDate": "2016-01-01",
 	"endDate": "2018-12-31",
 	"minCount": 28921,
-    "maxCount": 29061
+	"maxCount": 29061
 }
 ```
 
