@@ -1,4 +1,5 @@
 import { Request, Response } from 'express';
+
 import { IRecord } from './records';
 
 interface IRoute {
@@ -8,9 +9,9 @@ interface IRoute {
 }
 
 interface IRouteResponse {
-    code: Number;
-    msg: String;
-    records?: IRecord[]
+    code: number;
+    msg: string;
+    records?: IRecord[];
 }
 
-export { IRoute, IRouteResponse }
+export { IRoute, IRouteResponse };

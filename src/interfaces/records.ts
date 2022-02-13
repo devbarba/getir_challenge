@@ -1,14 +1,14 @@
 interface IRecord {
     key: string;
     createdAt: Date;
-    totalCount: Number;
+    totalCount: number;
 }
 
 interface IRequestRecord {
     startDate: Date;
     endDate: Date;
-    minCount: Number;
-    maxCount: Number;
+    minCount: number;
+    maxCount: number;
 }
 
-export { IRecord, IRequestRecord }
+export { IRecord, IRequestRecord };

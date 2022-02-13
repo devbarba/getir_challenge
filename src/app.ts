@@ -1,11 +1,12 @@
-import connect from './database';
 import bodyParser from 'body-parser';
-import express, { Application } from 'express';
 import cors from 'cors';
-import routes from './routes/index';
-import IConfig from './interfaces/configs';
-import { autoloadConfig, getBaseDir } from './utils/helper';
+import express, { Application } from 'express';
+
+import connect from './database';
 import Handler from './errors/handler.error';
+import IConfig from './interfaces/configs';
+import routes from './routes/index';
+import { autoloadConfig, getBaseDir } from './utils/helper';
 
 class App {
     public server: Application;
@@ -48,14 +49,14 @@ class App {
                 return res.status(error.getStatusCode()).json({
                     code: error.getCode(),
                     msg: error.getMessage(),
-                    records: []
-                })
+                    records: [],
+                });
             }
 
             return res.status(500).json({
                 code: 500,
-                msg:  error.message
-            })
+                msg: error.message,
+            });
         });
     }
 }
