@@ -1,36 +1,29 @@
 import * as dotenv from 'dotenv-safe';
 import { MongoClient } from 'mongodb';
+import mongoose from 'mongoose';
 import request from 'supertest';
 
 import app from '../../app';
 import { IRecord } from '../../interfaces/records';
+import { defaultPayload, missingKeysPayload } from '../mocks/payloads.mock';
 
 describe('POST /orders', () => {
     let connection: MongoClient;
+    const endpoint = '/records';
 
     beforeAll(async () => {
         dotenv.config();
         connection = await MongoClient.connect(app.configObject.app.mongo_uri);
-    });
+    }, 100000);
 
     afterAll(async () => {
         await connection.close();
+        await mongoose.disconnect();
     });
-
-    const defaultPayload = {
-        startDate: '2016-01-26',
-        endDate: '2018-02-02',
-        minCount: 2700,
-        maxCount: 3000,
-    };
-    const missingKeysPayload = {
-        startDate: '2016-01-26',
-        maxCount: 3000,
-    };
 
     test('should retrieve data from mongoDB', async () => {
         const records = await request(app.server)
-            .post('/records')
+            .post(endpoint)
             .send(defaultPayload);
 
         expect(records.body).toBeDefined();
@@ -50,7 +43,7 @@ describe('POST /orders', () => {
         newPayload.maxCount = 3000000;
 
         const records = await request(app.server)
-            .post('/records')
+            .post(endpoint)
             .send(defaultPayload);
 
         expect(records.body).toBeDefined();
@@ -66,7 +59,7 @@ describe('POST /orders', () => {
 
     test('should retrieve error because missing keys', async () => {
         const records = await request(app.server)
-            .post('/records')
+            .post(endpoint)
             .send(missingKeysPayload);
 
         expect(records.body).toBeDefined();
@@ -84,7 +77,7 @@ describe('POST /orders', () => {
         const newPayload = defaultPayload;
 
         const records = await request(app.server)
-            .post('/records')
+            .post(endpoint)
             .send({ ...newPayload, testing: 1000 });
 
         expect(records.body).toBeDefined();
@@ -100,7 +93,7 @@ describe('POST /orders', () => {
 
     test('should retrieve error because malformed json', async () => {
         const records = await request(app.server)
-            .post('/records')
+            .post(endpoint)
             .set('Content-Type', 'application/json')
             .send(',,');
 

@@ -1,8 +1,10 @@
 import * as dotenv from 'dotenv-safe';
 import { MongoClient } from 'mongodb';
+import mongoose from 'mongoose';
 
 import app from '../../app';
 import RecordService from '../../services/record.service';
+import { defaultPayload } from '../mocks/payloads.mock';
 
 describe('Testing RecordsService', () => {
     let recordService: RecordService;
@@ -12,18 +14,12 @@ describe('Testing RecordsService', () => {
         dotenv.config();
         recordService = new RecordService();
         connection = await MongoClient.connect(app.configObject.app.mongo_uri);
-    }, 10000);
+    }, 100000);
 
     afterAll(async () => {
         await connection.close();
+        await mongoose.disconnect();
     });
-
-    const defaultPayload = {
-        startDate: '2016-01-26',
-        endDate: '2018-02-02',
-        minCount: 2700,
-        maxCount: 3000,
-    };
 
     test('should retrieve data from mongoDB', async () => {
         const records = await recordService.read({
