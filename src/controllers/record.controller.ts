@@ -33,14 +33,16 @@ class Recordontroller implements IRecordController {
 
             if (new Date(startDate).getTime() > new Date(endDate).getTime())
                 throw new Handler(
-                    responseCodes.DATA_MISMATCH.extra?.date ?? '',
+                    // @ts-ignore
+                    responseCodes.DATA_MISMATCH.extra.date,
                     responseCodes.DATA_MISMATCH.code,
                     BAD_REQUEST
                 );
 
             if (minCount > maxCount)
                 throw new Handler(
-                    responseCodes.DATA_MISMATCH.extra?.count ?? '',
+                    // @ts-ignore
+                    responseCodes.DATA_MISMATCH.extra.count,
                     responseCodes.DATA_MISMATCH.code,
                     BAD_REQUEST
                 );
