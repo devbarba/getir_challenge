@@ -1,4 +1,6 @@
 export default {
+    preset: '@shelf/jest-mongodb',
+    testTimeout: 20000,
     clearMocks: true,
     collectCoverage: true,
     collectCoverageFrom: ['src/**'],

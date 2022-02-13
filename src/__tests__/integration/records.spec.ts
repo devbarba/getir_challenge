@@ -1,12 +1,20 @@
-import mongoose from 'mongoose';
+import * as dotenv from 'dotenv-safe';
+import { MongoClient } from 'mongodb';
 import request from 'supertest';
 
 import app from '../../app';
 import { IRecord } from '../../interfaces/records';
 
 describe('POST /orders', () => {
-    afterAll(() => {
-        mongoose.connection.close();
+    let connection: MongoClient;
+
+    beforeAll(async () => {
+        dotenv.config();
+        connection = await MongoClient.connect(app.configObject.app.mongo_uri);
+    });
+
+    afterAll(async () => {
+        await connection.close();
     });
 
     const defaultPayload = {
@@ -34,7 +42,7 @@ describe('POST /orders', () => {
             records: {} as IRecord,
         });
         expect.assertions(4);
-    }, 100000);
+    });
 
     test('should retrieve 404 not found cause does not exist in mongoDB', async () => {
         const newPayload = defaultPayload;
@@ -54,7 +62,7 @@ describe('POST /orders', () => {
             records: [],
         });
         expect.assertions(4);
-    }, 100000);
+    });
 
     test('should retrieve error because missing keys', async () => {
         const records = await request(app.server)
