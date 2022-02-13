@@ -12,7 +12,7 @@
     "production": "node ./dist/server.js",
     "clean": "rm -rf ./dist && mkdir dist",
     "dev": "PROJECT_DIR=src ts-node-dev -r tsconfig-paths/register --respawn --transpile-only --ignore-watch node_modules --no-notify src/server.ts",
-    "test": "jest --config=jest.config.ts --coverage=true"
+    "test": "jest"
   },
   "babel": {
     "plugins": [
