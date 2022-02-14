@@ -55,6 +55,22 @@ First of all I would like to thank you for the opportunity to be able to take th
 
 # End-points
 
+### Health Check
+
+| resource                  | description                       |
+| :------------------------ | :-------------------------------- |
+| `/api` **GET** | Health check route |
+
+`/api` **GET** - **[200 - Success]**
+
+**RESPONSE - Expected Payload**
+```shell
+{
+	"timestamp": "1644828822912"
+}
+```
+___
+
 ### Records
 
 | resource                  | description                       |
