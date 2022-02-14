@@ -107,8 +107,8 @@ ___
 	"startDate": "2016-01-01",
 	"endDate": "2018-12-31",
 	"minCount": 28921,
-    "maxCount": 29061,
-    "testing": true
+	"maxCount": 29061,
+	"testing": true
 }
 ```
 
@@ -130,7 +130,7 @@ ___
 	"startDate": "2016-01-01",
 	"endDate": "2018-12-31",
 	"minCount": 289211,
-    "maxCount": 29061
+	"maxCount": 29061
 }
 ```
 
@@ -152,7 +152,7 @@ ___
 	"startDate": "2018-12-31",
 	"endDate": "2016-01-01",
 	"minCount": 28921,
-    "maxCount": 29061
+	"maxCount": 29061
 }
 ```
 
@@ -217,7 +217,7 @@ ___
 	"startDate": "2016-01-01",
 	"endDate": "2018-12-31",
 	"minCount": 28921,
-    "maxCount": 29061
+	"maxCount": 29061
 }
 ```
 
@@ -261,11 +261,9 @@ To run the application on your machine, follow these steps:
 
 4. `cp .env.example .env` to copy environment variables.
 
-5. Go to `.env` file and put in `MONGO_URI` environment variable the mongo uri following this pattern: `mongodb+srv://[user]:[password]@[server_ip_or_url]/[database]?retryWrites=true`
+5. `yarn build` or `npm run build` to build the application.
 
-6. `yarn build` or `npm run build` to build the application.
-
-7. `yarn start` or `npm run start` to run the application.
+6. `yarn start` or `npm run start` to run the application.
 
 PS: `yarn dev` to run on dev mode.
 ## CURL to test API
