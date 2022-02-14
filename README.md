@@ -231,6 +231,8 @@ ___
 
 ## Primarily Used Technologies
 
+- [Docker](https://www.docker.com/) - 20.10.5
+- [Docker Composer](https://docs.docker.com/compose/) - 1.29.0
 - [Node](https://nodejs.org/en/) - 14.17.0
 - [Yarn](https://yarnpkg.com/) - 1.22.17
 - [Jest](https://jestjs.io/) - 27.5.1
@@ -252,6 +254,18 @@ To run the application it is only necessary to have Node installed in version v1
 ### Phases
 
 To run the application on your machine, follow these steps:
+
+#### Docker
+
+1. git clone [https://github.com/devbarba/getir_challenge](https://github.com/devbarba/getir_challenge)
+
+2. `cd getir_challenge` to access the project folder.
+
+3. `cp .env.example .env` to copy environment variables.
+
+4. `docker-compose up -d --build`
+
+#### Local
 
 1. git clone [https://github.com/devbarba/getir_challenge](https://github.com/devbarba/getir_challenge)
 
