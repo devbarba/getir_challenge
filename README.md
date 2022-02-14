@@ -253,6 +253,7 @@ To run the application it is only necessary to have Node installed in version v1
 
 To run the application on your machine, follow these steps:
 
+### Local
 1. git clone [https://github.com/devbarba/getir_challenge](https://github.com/devbarba/getir_challenge)
 
 2. `cd getir_challenge` to access the project folder.
@@ -266,6 +267,10 @@ To run the application on your machine, follow these steps:
 6. `yarn start` or `npm run start` to run the application.
 
 PS: `yarn dev` to run on dev mode.
+
+### Docker
+
+To run with docker, please, go to [feat/docker](https://github.com/devbarba/getir_challenge/tree/feat/docker) branch.
 ## CURL to test API
 
 **Heroku**
