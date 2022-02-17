@@ -1,10 +1,10 @@
 import fs from 'fs';
-import { BAD_REQUEST, PRECONDITION_FAILED } from 'http-status';
+import Joi from 'joi';
 import path from 'path';
 
 import Handler from '../errors/handler.error';
 import IConfig from '../interfaces/configs';
-import responseCodes from './codes';
+import { responseCodes, IResponseCodes } from './codes';
 
 /**
  * autoloadConfig: Auto load configurations.
@@ -69,41 +69,42 @@ const getDir = (folder = ''): string => path.resolve(__dirname, '../', folder);
  */
 const getBaseDir = (folder = ''): string => getDir(folder ? `${folder}` : '');
 
+const getCodes = (
+    code: string
+): Pick<IResponseCodes, 'internal' | 'external'> => {
+    const givenCodes = {
+        'date.base': responseCodes.BAD_REQUEST,
+        'any.required': responseCodes.PRECONDITION_FAILED,
+        'object.unknown': responseCodes.BAD_REQUEST,
+        'date.less': responseCodes.DATA_MISMATCH,
+        'number.less': responseCodes.DATA_MISMATCH,
+    };
+
+    return givenCodes[code];
+};
+
 /**
- * verifyFields: Verify if required field is present or if have extra fields.
+ * verifyFields: Schema verification with Joi.
  * @param requiredFields string[]
  * @param field {}
  * @returns false | string[]
  */
 const verifyFields = (
-    requiredFields: string[],
-    fields: Record<string, unknown>
-): false | string[] => {
-    const inexistentFields: string[] = [];
-    const extraFields: string[] = [];
+    body: unknown,
+    schema: Joi.ObjectSchema<unknown>
+): Handler | void => {
+    const schemaValidated = schema.validate(body);
 
-    requiredFields.forEach((reqField) => {
-        if (!(reqField in fields)) inexistentFields.push(reqField);
-    });
+    if (schemaValidated.error && schemaValidated.error.details) {
+        const missingField = schemaValidated.error.details[0];
+        const finalCodes = getCodes(missingField.type);
 
-    if (inexistentFields.length > 0)
         throw new Handler(
-            `${responseCodes.PRECONDITION_FAILED.msg}: ${inexistentFields}`,
-            responseCodes.PRECONDITION_FAILED.code,
-            PRECONDITION_FAILED
+            missingField.message,
+            Number(finalCodes.internal),
+            Number(finalCodes.external)
         );
-
-    for (const field in fields)
-        if (!requiredFields.includes(field)) extraFields.push(field);
-
-    if (extraFields.length > 0)
-        throw new Handler(
-            `${responseCodes.BAD_REQUEST.msg}: ${extraFields}`,
-            responseCodes.BAD_REQUEST.code,
-            BAD_REQUEST
-        );
-
-    return false;
+    }
 };
 
 export { autoloadConfig, getEnv, getDir, getBaseDir, verifyFields };
