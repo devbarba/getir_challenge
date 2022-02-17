@@ -2,11 +2,6 @@
 # yarn lockfile v1
 
 
-"@aitodotai/json-stringify-pretty-compact@^1.3.0":
-  version "1.3.0"
-  resolved "https://registry.yarnpkg.com/@aitodotai/json-stringify-pretty-compact/-/json-stringify-pretty-compact-1.3.0.tgz#a3fedb95f356f532d115268df4b156e682242345"
-  integrity sha512-K+whdCBlVjzx8zCK2ZUohGJb5bUOxRpiEAfD1NCUgH0mApdDZD9c7VHXJVzWlt3wfV1X4OFyCRmTqbPd6U87lQ==
-
 "@ampproject/remapping@^2.0.0":
   version "2.1.1"
   resolved "https://registry.yarnpkg.com/@ampproject/remapping/-/remapping-2.1.1.tgz#7922fb0817bf3166d8d9e258c57477e3fd1c3610"
@@ -2098,7 +2093,7 @@ chalk@^2.0.0:
     escape-string-regexp "^1.0.5"
     supports-color "^5.3.0"
 
-chalk@^4.0.0, chalk@^4.1.2:
+chalk@^4.0.0:
   version "4.1.2"
   resolved "https://registry.yarnpkg.com/chalk/-/chalk-4.1.2.tgz#aac4e2b7734a740867aeb16bf02aad556a1e7a01"
   integrity sha512-oKnbhFyRIXpUuez8iBMmyEa4nbj4IOQyuhc/wy9kY7/WVPcwIO9VA668Pu8RkO7+0G76SLROeyw9CpQ061i4mA==
@@ -3718,15 +3713,6 @@ jest-jasmine2@^27.5.1:
     pretty-format "^27.5.1"
     throat "^6.0.1"
 
-jest-joi@^1.1.11:
-  version "1.1.11"
-  resolved "https://registry.yarnpkg.com/jest-joi/-/jest-joi-1.1.11.tgz#41355c7fff5ec8a71e8fc161d29831ff97ed8fcc"
-  integrity sha512-XEngGBFCPHYsBnR3FNy5WTW+Fgv7tGmOf4xbgJZWbxaBzxrPXMP1p48ABDJKt0FCVi4MWY1hKuU8VMzuN0FCzQ==
-  dependencies:
-    "@aitodotai/json-stringify-pretty-compact" "^1.3.0"
-    chalk "^4.1.2"
-    jest-matcher-utils "^27.2.0"
-
 jest-leak-detector@^27.5.1:
   version "27.5.1"
   resolved "https://registry.yarnpkg.com/jest-leak-detector/-/jest-leak-detector-27.5.1.tgz#6ec9d54c3579dd6e3e66d70e3498adf80fde3fb8"
@@ -3735,7 +3721,7 @@ jest-leak-detector@^27.5.1:
     jest-get-type "^27.5.1"
     pretty-format "^27.5.1"
 
-jest-matcher-utils@^27.2.0, jest-matcher-utils@^27.5.1:
+jest-matcher-utils@^27.5.1:
   version "27.5.1"
   resolved "https://registry.yarnpkg.com/jest-matcher-utils/-/jest-matcher-utils-27.5.1.tgz#9c0cdbda8245bc22d2331729d1091308b40cf8ab"
   integrity sha512-z2uTx/T6LBaCoNWNFWwChLBKYxTMcGBRjAt+2SbP929/Fflb9aa5LGma654Rz8z9HLxsrUaYzxE9T/EFIL/PAw==
