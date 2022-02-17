@@ -100,7 +100,7 @@ const verifyFields = (
         const finalCodes = getCodes(missingField.type);
 
         throw new Handler(
-            missingField.message,
+            missingField.message.replace(/['"]+/g, ''),
             Number(finalCodes.internal),
             Number(finalCodes.external)
         );
