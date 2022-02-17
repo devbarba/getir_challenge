@@ -116,7 +116,7 @@ ___
 ```shell
 {
 	"code": 2,
-	"msg": "remove extra field(s): testing",
+	"msg": "testing is not allowed",
 	"records": []
 }
 ```
@@ -138,7 +138,29 @@ ___
 ```shell
 {
 	"code": 4,
-	"msg": "minCount greather than maxCount",
+	"msg": "minCount must be less than ref:maxCount",
+	"records": []
+}
+```
+___
+
+`/api/records` **POST** - **[400 - Bad Request]**
+
+**REQUEST - minCount or maxCount with string values**
+```shell
+{
+	"startDate": "2016-01-01",
+	"endDate": "2018-12-31",
+	"minCount": "abc",
+	"maxCount": "def"
+}
+```
+
+**RESPONSE**
+```shell
+{
+	"code": 2,
+	"msg": "minCount must be a number",
 	"records": []
 }
 ```
@@ -160,7 +182,29 @@ ___
 ```shell
 {
 	"code": 4,
-	"msg": "startDate greather than endDate",
+	"msg": "startDate must be less than ref:endDate",
+	"records": []
+}
+```
+___
+
+`/api/records` **POST** - **[400 - Bad Request]**
+
+**REQUEST - startDate or endDate with no date values**
+```shell
+{
+	"startDate": "aaaa",
+	"endDate": "bbbb",
+	"minCount": 28921,
+	"maxCount": 29061
+}
+```
+
+**RESPONSE**
+```shell
+{
+	"code": 2,
+	"msg": "startDate must be a valid date",
 	"records": []
 }
 ```
@@ -203,7 +247,7 @@ ___
 ```shell
 {
 	"code": 1,
-	"msg": "missing field(s): maxCount",
+	"msg": "maxCount is required",
 	"records": []
 }
 ```
@@ -240,6 +284,7 @@ ___
 - [Supertest](https://www.npmjs.com/package/supertest) - 6.2.2
 - [Babel](https://babeljs.io/) - 7.17.0
 - [Eslint](https://eslint.org/) - 8.9.0
+- [Joi](https://joi.dev/) - 17.6.0
 - [Heroku](https://www.heroku.com/)
 - [GH Actions](https://github.com/features/actions)
 
