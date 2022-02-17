@@ -6,6 +6,7 @@ import connect from './database';
 import Handler from './errors/handler.error';
 import IConfig from './interfaces/configs';
 import routes from './routes/index';
+import { responseCodes } from './utils/codes';
 import { autoloadConfig, getBaseDir } from './utils/helper';
 
 class App {
@@ -54,7 +55,7 @@ class App {
             }
 
             return res.status(500).json({
-                code: 5,
+                code: responseCodes.SERVER_ERROR.internal,
                 msg: error.message,
             });
         });

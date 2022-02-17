@@ -15,6 +15,8 @@ const validationResponses = [
     'is not allowed',
     'is required',
     'must be less than ref:',
+    'must be a valid date',
+    'must be a number',
 ];
 
 export { defaultPayload, missingKeysPayload, validationResponses };

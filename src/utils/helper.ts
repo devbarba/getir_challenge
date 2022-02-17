@@ -74,6 +74,7 @@ const getCodes = (
 ): Pick<IResponseCodes, 'internal' | 'external'> => {
     const givenCodes = {
         'date.base': responseCodes.BAD_REQUEST,
+        'number.base': responseCodes.BAD_REQUEST,
         'any.required': responseCodes.PRECONDITION_FAILED,
         'object.unknown': responseCodes.BAD_REQUEST,
         'date.less': responseCodes.DATA_MISMATCH,
