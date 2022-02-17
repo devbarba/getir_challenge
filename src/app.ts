@@ -40,7 +40,7 @@ class App {
     }
 
     private mongoDatabase() {
-        connect(this.configObject.app.mongo_uri, true);
+        connect(this.configObject.app.mongo, true);
     }
 
     private errorHandling() {
