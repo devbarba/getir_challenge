@@ -7,7 +7,14 @@ const defaultPayload = {
 
 const missingKeysPayload = {
     startDate: '2016-01-26',
+    minCount: 2700,
     maxCount: 3000,
 };
 
-export { defaultPayload, missingKeysPayload };
+const validationResponses = [
+    'is not allowed',
+    'is required',
+    'must be less than ref:',
+];
+
+export { defaultPayload, missingKeysPayload, validationResponses };

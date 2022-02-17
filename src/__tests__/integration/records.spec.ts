@@ -1,31 +1,24 @@
 import * as dotenv from 'dotenv-safe';
-import {
-    BAD_REQUEST,
-    INTERNAL_SERVER_ERROR,
-    NOT_FOUND,
-    OK,
-    PRECONDITION_FAILED,
-} from 'http-status';
-import { MongoClient } from 'mongodb';
 import mongoose from 'mongoose';
 import request from 'supertest';
 
 import app from '../../app';
 import { IRecord } from '../../interfaces/records';
-import responseCodes from '../../utils/codes';
-import { defaultPayload, missingKeysPayload } from '../mocks/payloads.mock';
+import { responseCodes } from '../../utils/codes';
+import {
+    defaultPayload,
+    missingKeysPayload,
+    validationResponses,
+} from '../mocks/payloads.mock';
 
 describe('POST /api/orders', () => {
-    let connection: MongoClient;
     const endpoint = '/api/records';
 
     beforeAll(async () => {
         dotenv.config();
-        connection = await MongoClient.connect(app.configObject.app.mongo_uri);
-    }, 100000);
+    });
 
     afterAll(async () => {
-        await connection.close();
         await mongoose.disconnect();
     });
 
@@ -35,10 +28,10 @@ describe('POST /api/orders', () => {
             .send(defaultPayload);
 
         expect(records.body).toBeDefined();
-        expect(records.status).toBe(OK);
+        expect(records.status).toBe(responseCodes.SUCCESS.external);
         expect(records.body.records.length).toBeGreaterThan(0);
         expect(records.body).toMatchObject({
-            code: responseCodes.SUCCESS.code,
+            code: responseCodes.SUCCESS.internal,
             msg: responseCodes.SUCCESS.msg,
             records: {} as IRecord,
         });
@@ -57,10 +50,10 @@ describe('POST /api/orders', () => {
             });
 
         expect(records.body).toBeDefined();
-        expect(records.status).toBe(BAD_REQUEST);
+        expect(records.status).toBe(responseCodes.DATA_MISMATCH.external);
         expect(records.body).toMatchObject({
-            code: responseCodes.DATA_MISMATCH.code,
-            msg: responseCodes.DATA_MISMATCH.extra?.date,
+            code: responseCodes.DATA_MISMATCH.internal,
+            msg: `startDate ${validationResponses[2]}endDate`,
             records: [],
         });
         expect.assertions(3);
@@ -78,10 +71,10 @@ describe('POST /api/orders', () => {
             });
 
         expect(records.body).toBeDefined();
-        expect(records.status).toBe(BAD_REQUEST);
+        expect(records.status).toBe(responseCodes.DATA_MISMATCH.external);
         expect(records.body).toMatchObject({
-            code: responseCodes.DATA_MISMATCH.code,
-            msg: responseCodes.DATA_MISMATCH.extra?.count,
+            code: responseCodes.DATA_MISMATCH.internal,
+            msg: `minCount ${validationResponses[2]}maxCount`,
             records: [],
         });
         expect.assertions(3);
@@ -97,10 +90,10 @@ describe('POST /api/orders', () => {
             .send(defaultPayload);
 
         expect(records.body).toBeDefined();
-        expect(records.status).toBe(NOT_FOUND);
+        expect(records.status).toBe(responseCodes.NOT_FOUND.external);
         expect(records.body.records.length).toBe(0);
         expect(records.body).toMatchObject({
-            code: responseCodes.NOT_FOUND.code,
+            code: responseCodes.NOT_FOUND.internal,
             msg: responseCodes.NOT_FOUND.msg,
             records: [],
         });
@@ -113,11 +106,11 @@ describe('POST /api/orders', () => {
             .send(missingKeysPayload);
 
         expect(records.body).toBeDefined();
-        expect(records.status).toBe(PRECONDITION_FAILED);
+        expect(records.status).toBe(responseCodes.PRECONDITION_FAILED.external);
         expect(records.body.records.length).toBe(0);
         expect(records.body).toMatchObject({
-            code: responseCodes.PRECONDITION_FAILED.code,
-            msg: `${responseCodes.PRECONDITION_FAILED.msg}: endDate,minCount`,
+            code: responseCodes.PRECONDITION_FAILED.internal,
+            msg: `endDate ${validationResponses[1]}`,
             records: [],
         });
         expect.assertions(4);
@@ -131,11 +124,11 @@ describe('POST /api/orders', () => {
             .send({ ...newPayload, testing: 1000 });
 
         expect(records.body).toBeDefined();
-        expect(records.status).toBe(BAD_REQUEST);
+        expect(records.status).toBe(responseCodes.BAD_REQUEST.external);
         expect(records.body.records.length).toBe(0);
         expect(records.body).toMatchObject({
-            code: responseCodes.BAD_REQUEST.code,
-            msg: `${responseCodes.BAD_REQUEST.msg}: testing`,
+            code: responseCodes.BAD_REQUEST.internal,
+            msg: `testing ${validationResponses[0]}`,
             records: [],
         });
         expect.assertions(4);
@@ -148,10 +141,10 @@ describe('POST /api/orders', () => {
             .send(',,');
 
         expect(records.body).toBeDefined();
-        expect(records.status).toBe(INTERNAL_SERVER_ERROR);
+        expect(records.status).toBe(responseCodes.SERVER_ERROR.external);
         expect(records.body.records).toBeUndefined();
         expect(records.body).toMatchObject({
-            code: responseCodes.SERVER_ERROR.code,
+            code: responseCodes.SERVER_ERROR.internal,
             msg: 'Unexpected token , in JSON at position 0',
         });
         expect.assertions(4);
