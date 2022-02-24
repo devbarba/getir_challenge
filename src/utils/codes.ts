@@ -1,40 +1,46 @@
+import {
+    BAD_REQUEST,
+    NOT_FOUND,
+    OK,
+    PRECONDITION_FAILED,
+    INTERNAL_SERVER_ERROR,
+} from 'http-status';
+
 interface IResponseCodes {
     [key: string]: {
-        code: number;
-        msg: string;
-        extra?: { date: string; count: string };
+        internal: number;
+        external: number;
+        msg?: string;
     };
 }
 
 const responseCodes: IResponseCodes = {
     SUCCESS: {
-        code: 0,
+        internal: 0,
+        external: OK,
         msg: 'success',
     },
     PRECONDITION_FAILED: {
-        code: 1,
-        msg: 'missing field(s)',
+        internal: 1,
+        external: PRECONDITION_FAILED,
     },
     BAD_REQUEST: {
-        code: 2,
-        msg: 'remove extra field(s)',
+        internal: 2,
+        external: BAD_REQUEST,
     },
     NOT_FOUND: {
-        code: 3,
+        internal: 3,
+        external: NOT_FOUND,
         msg: 'no query results found',
     },
     DATA_MISMATCH: {
-        code: 4,
-        msg: '',
-        extra: {
-            date: 'startDate greather than endDate',
-            count: 'minCount greather than maxCount',
-        },
+        internal: 4,
+        external: BAD_REQUEST,
     },
     SERVER_ERROR: {
-        code: 5,
-        msg: 'internal server error',
+        internal: 5,
+        external: INTERNAL_SERVER_ERROR,
     },
 };
 
-export default responseCodes;
+export { responseCodes, IResponseCodes };

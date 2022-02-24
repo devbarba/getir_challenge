@@ -1,9 +1,7 @@
-import { NOT_FOUND } from 'http-status';
-
 import Handler from '../errors/handler.error';
 import { IRecord, IRequestRecord } from '../interfaces/records';
 import Record from '../models/Record';
-import responseCodes from '../utils/codes';
+import { responseCodes } from '../utils/codes';
 
 interface IRecordService {
     read({
@@ -37,9 +35,9 @@ class RecordService implements IRecordService {
 
         if (!records || records.length === 0)
             throw new Handler(
-                responseCodes.NOT_FOUND.msg,
-                responseCodes.NOT_FOUND.code,
-                NOT_FOUND
+                String(responseCodes.NOT_FOUND.msg),
+                responseCodes.NOT_FOUND.internal,
+                responseCodes.NOT_FOUND.external
             );
 
         return records;

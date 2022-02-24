@@ -4,6 +4,11 @@ export default interface IConfig {
         host: string;
         port: number;
         timezone: string;
-        mongo_uri: string;
+        mongo: {
+            host: string;
+            name: string;
+            user: string;
+            pass: string;
+        };
     };
 }

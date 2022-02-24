@@ -1,4 +1,5 @@
 import * as dotenv from 'dotenv-safe';
+import Joi from 'joi';
 
 import IConfig from '../../configs/app';
 import {
@@ -8,6 +9,11 @@ import {
     getBaseDir,
     verifyFields,
 } from '../../utils/helper';
+import {
+    defaultPayload,
+    missingKeysPayload,
+    validationResponses,
+} from '../mocks/payloads.mock';
 
 describe('Testing helper functions', () => {
     beforeAll(() => {
@@ -76,33 +82,71 @@ describe('Testing helper functions', () => {
     });
 
     describe('handling verifyFields()', () => {
-        const requiredFields = ['startDate', 'endDate', 'minCount', 'maxCount'];
-        const missingBody = { startDate: '2022-02-10', minCount: 3000 };
-        const fullBody = {
-            startDate: '2022-02-10',
-            endDate: '2022-02-12',
-            minCount: 3000,
-            maxCount: 3100,
-        };
+        const joiSchema = Joi.object({
+            startDate: Joi.date().less(Joi.ref('endDate')).required(),
+            endDate: Joi.date().required(),
+            minCount: Joi.number().less(Joi.ref('maxCount')).required(),
+            maxCount: Joi.number().required(),
+        });
 
         test('expect to return missing fields when call verifyFields()', () => {
             expect(() =>
-                verifyFields(requiredFields, missingBody)
-            ).toThrowError('missing field(s): endDate,maxCount');
+                verifyFields(missingKeysPayload, joiSchema)
+            ).toThrowError(`endDate ${validationResponses[1]}`);
             expect.assertions(1);
         });
 
         test('expect to return extra fields when call verifyFields()', () => {
             expect(() =>
-                verifyFields(requiredFields, { ...fullBody, testing: true })
-            ).toThrowError('remove extra field(s): testing');
+                verifyFields({ ...defaultPayload, testing: true }, joiSchema)
+            ).toThrowError(`testing ${validationResponses[0]}`);
             expect.assertions(1);
         });
 
-        test('expect to return false when call verifyFields()', () => {
-            const fields = verifyFields(requiredFields, fullBody);
+        test('expect to return void when call verifyFields()', () => {
+            expect(verifyFields(defaultPayload, joiSchema)).toBeFalsy();
+            expect.assertions(1);
+        });
 
-            expect(fields).toBeFalsy();
+        test('expect to return validation error when call verifyFields() cause invalid date format: startDate', () => {
+            expect(() =>
+                verifyFields({ ...defaultPayload, startDate: 'abc' }, joiSchema)
+            ).toThrowError(`startDate ${validationResponses[3]}`);
+            expect.assertions(1);
+        });
+
+        test('expect to return validation error when call verifyFields() cause invalid date format: endDate', () => {
+            expect(() =>
+                verifyFields({ ...defaultPayload, endDate: 'abc' }, joiSchema)
+            ).toThrowError(`endDate ${validationResponses[3]}`);
+            expect.assertions(1);
+        });
+
+        test('expect to return validation error when call verifyFields() cause endDate < startDate', () => {
+            expect(() =>
+                verifyFields(
+                    {
+                        ...defaultPayload,
+                        startDate: '20222-01-01',
+                        endDate: '2011-10-10',
+                    },
+                    joiSchema
+                )
+            ).toThrowError(`startDate ${validationResponses[2]}endDate`);
+            expect.assertions(1);
+        });
+
+        test('expect to return validation error when call verifyFields() cause invalid number format: minCount', () => {
+            expect(() =>
+                verifyFields({ ...defaultPayload, minCount: 'abc' }, joiSchema)
+            ).toThrowError(`minCount ${validationResponses[4]}`);
+            expect.assertions(1);
+        });
+
+        test('expect to return validation error when call verifyFields() cause invalid number format: maxCount', () => {
+            expect(() =>
+                verifyFields({ ...defaultPayload, maxCount: 'abc' }, joiSchema)
+            ).toThrowError(`maxCount ${validationResponses[4]}`);
             expect.assertions(1);
         });
     });
