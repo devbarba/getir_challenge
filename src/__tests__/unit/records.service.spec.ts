@@ -13,7 +13,11 @@ describe('Testing RecordsService', () => {
     beforeAll(async () => {
         dotenv.config();
         recordService = new RecordService();
-        connection = await MongoClient.connect(app.configObject.app.mongo_uri);
+
+        const { host, user, pass, name } = app.configObject.app.mongo;
+        connection = await MongoClient.connect(
+            `mongodb+srv://${user}:${pass}@${host}/${name}`
+        );
     }, 100000);
 
     afterAll(async () => {
