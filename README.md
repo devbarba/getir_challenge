@@ -55,6 +55,22 @@ First of all I would like to thank you for the opportunity to be able to take th
 
 # End-points
 
+### Health Check
+
+| resource                  | description                       |
+| :------------------------ | :-------------------------------- |
+| `/api` **GET** | Health check route |
+
+`/api` **GET** - **[200 - Success]**
+
+**RESPONSE - Expected Payload**
+```shell
+{
+	"timestamp": "1644828822912"
+}
+```
+___
+
 ### Records
 
 | resource                  | description                       |
@@ -275,6 +291,8 @@ ___
 
 ## Primarily Used Technologies
 
+- [Docker](https://www.docker.com/) - 20.10.5
+- [Docker Composer](https://docs.docker.com/compose/) - 1.29.0
 - [Node](https://nodejs.org/en/) - 14.17.0
 - [Yarn](https://yarnpkg.com/) - 1.22.17
 - [Jest](https://jestjs.io/) - 27.5.1
@@ -298,7 +316,18 @@ To run the application it is only necessary to have Node installed in version v1
 
 To run the application on your machine, follow these steps:
 
-### Local
+#### Docker
+
+1. git clone [https://github.com/devbarba/getir_challenge](https://github.com/devbarba/getir_challenge)
+
+2. `cd getir_challenge` to access the project folder.
+
+3. `cp .env.example .env` to copy environment variables.
+
+4. `docker-compose up -d --build`
+
+#### Local
+
 1. git clone [https://github.com/devbarba/getir_challenge](https://github.com/devbarba/getir_challenge)
 
 2. `cd getir_challenge` to access the project folder.
@@ -313,9 +342,6 @@ To run the application on your machine, follow these steps:
 
 PS: `yarn dev` to run on dev mode.
 
-### Docker
-
-To run with docker, please, go to [feat/docker](https://github.com/devbarba/getir_challenge/tree/feat/docker) branch.
 ## CURL to test API
 
 **Heroku**
